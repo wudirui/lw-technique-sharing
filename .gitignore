@@ -4,3 +4,9 @@
 .gitignore
 .idea/
 lw-technique-sharing.iml
+
+.DS_Store
+*.class
+*.jar
+*/target/**
+target/
