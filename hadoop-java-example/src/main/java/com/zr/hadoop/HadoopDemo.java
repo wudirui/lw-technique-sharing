@@ -1,3 +1,5 @@
+package com.zr.hadoop;
+
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 
 import java.io.BufferedReader;
@@ -7,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * @Author ruizhang
+ * @Author super rui
  * @Date 2019/8/19 22:21
  */
 public class HadoopDemo {
