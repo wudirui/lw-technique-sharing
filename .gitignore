@@ -1,12 +1,6 @@
-# Created by .ignore support plugin (hsz.mobi)
-/.gitignore
-/lw-technique-sharing.iml
-.gitignore
 .idea/
-lw-technique-sharing.iml
-
-.DS_Store
+*.iml
+target/
 *.class
 *.jar
-*/target/**
-target/
+
