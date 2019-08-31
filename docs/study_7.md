@@ -1,4 +1,4 @@
-### <center>linux环境搭建单机版hadoop</center>
+### <p align="center">linux环境搭建单机版hadoop</p>
 
 ---
 
