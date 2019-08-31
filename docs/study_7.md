@@ -182,8 +182,4 @@
     
    ![](imgs/study-7/s_7_10.png)
     
- 
-
-
-[返回](../studies.md)
 
