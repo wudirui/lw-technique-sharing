@@ -163,7 +163,7 @@
 
     public boolean mkdirs(Path f) throws IOException
 
-此方法一次性创建所有必要的文件夹，就像 java.io.File 类的 mkdirs() 方法，如果所有目录都创建成功就会返回true。
+&ensp;&ensp;&ensp; 此方法一次性创建所有必要的文件夹，就像 java.io.File 类的 mkdirs() 方法，如果所有目录都创建成功就会返回true。
 
 #### 六、查询文件系统
 
@@ -176,4 +176,4 @@
 
     public boolean delete(Path f, boolean recursive) throws IOException
     
-如果 f 是一个文件或者空目录，recursive 的值就会被忽略。只有当recursive的值为true时,非空目录及其内容会被删除，否则抛出异常。
+&ensp;&ensp;&ensp; 如果 f 是一个文件或者空目录，recursive 的值就会被忽略。只有当recursive的值为true时,非空目录及其内容会被删除，否则抛出异常。
