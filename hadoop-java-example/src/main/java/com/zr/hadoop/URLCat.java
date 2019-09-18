@@ -23,7 +23,6 @@ public class URLCat {
     public static void main(String[] args) {
         readFile();
     }
-
     /**
      * 从hadoop的url读取数据
      */

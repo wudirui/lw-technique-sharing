@@ -107,3 +107,73 @@
 
     
 
+#### 三、数据写入
+
+&ensp;&ensp;&ensp; FileSystem类有一系列新建文件的方法。最简单的方式是给准备新建的文件指定一个Path对象。
+然后返回一个用于写入的输出流。此方法有很多重载版本，允许我们是否需要强制覆盖现有文件、
+文件备份数目、写入文件时所用的缓冲区大小，文件快大小以及文件权限。
+
+- 代码
+
+        package com.zr.hadoop;
+
+        import org.apache.hadoop.conf.Configuration;
+        import org.apache.hadoop.fs.FileSystem;
+        import org.apache.hadoop.fs.Path;
+        import org.apache.hadoop.util.Progressable;
+        import java.io.*;
+        import java.net.URI;
+        public class FileCopyWithProgress {
+            public static void main(String[] args) throws IOException {
+                String localSrc = args[0];
+                String dst = args[1];
+                InputStream in = new BufferedInputStream(new FileInputStream(localSrc));
+                Configuration configuration = new Configuration();
+                FileSystem fs = FileSystem.get(URI.create(dst), configuration);
+                OutputStream out = fs.create(new Path(dst), new Progressable() {
+                    @Override
+                    public void progress() {
+                        System.out.println(".");
+                        System.out.println("----------");
+                    }
+                });
+        
+                org.apache.hadoop.io.IOUtils.copyBytes(in, out, 4409, true);
+        
+        
+            }
+        }
+        
+- maven编译jar包
+        
+       mvn clean install -DskipTests
+                
+- hadoop执行jar包
+
+        hadoop jar hadoop-java-example-1.0-SNAPSHOT.jar  com.zr.hadoop.FileCopyWithProgress D:\test\lw-technique-sharing\hadoop-java-example\target\demo.txt  /test/demo.txt
+
+- 指令解释
+    ![](imgs/study-1/s_1_1.jpg) 
+    
+- 访问hdfs文件系统查看文件是否上传成功
+   ![](imgs/study-1/s_1_2.jpg)
+   
+#### 五、目录
+&ensp;&ensp;&ensp;  FileSystem实例提供了创建目录的方法
+
+    public boolean mkdirs(Path f) throws IOException
+
+此方法一次性创建所有必要的文件夹，就像 java.io.File 类的 mkdirs() 方法，如果所有目录都创建成功就会返回true。
+
+#### 六、查询文件系统
+
+&ensp;&ensp;&ensp; FileSystem 类提供的 getFileStatus() 方法用于获取文件的 FileStatus对象，FileStatus 对象包含了文件的长度、块大小、复本、修改时间、所有者以及权限等。
+如果需要查看目录中的内容，调用FileSystem提供的 listStatus() 方法即可。
+
+#### 七、删除数据
+
+&ensp;&ensp;&ensp; 使用FileSystem的 delete()可以永久性的删除文件或者目录
+
+    public boolean delete(Path f, boolean recursive) throws IOException
+    
+如果 f 是一个文件或者空目录，recursive 的值就会被忽略。只有当recursive的值为true时,非空目录及其内容会被删除，否则抛出异常。

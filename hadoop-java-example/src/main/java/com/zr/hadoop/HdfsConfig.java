@@ -6,5 +6,5 @@ package com.zr.hadoop;
  */
 public class HdfsConfig {
     //hadoop文件系统的端口为9000
-    public static final String PATH = "hdfs://172.22.5.7:9000/user/admin/output/part-r-00000";
+    public static final String PATH = "hdfs://localhost:9000/test/out.log/part-r-00000";
 }
