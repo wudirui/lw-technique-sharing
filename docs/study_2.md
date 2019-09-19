@@ -24,7 +24,7 @@ FileSystem提供了一个方法来使所有缓存和数据节点强行同步，�
     
 &ensp;&ensp;&ensp;上面指令表示把第一个集群 /foo目录（及其内容） 复制到第二个集群的bar目录下 
 
-#### 五、hadoop存档
+#### 六、hadoop存档
 &ensp;&ensp;&ensp; 每个文件都按照快方式存储，每个块的元数据都存储在nameNode的内存中，因此hadoop存储小文件非常低效。因为大量的小文件会耗尽nameNode中的内存。
 
 - 使用hadoop的存档工具
