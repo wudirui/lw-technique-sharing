@@ -40,103 +40,80 @@
 
 - 上传
  
-        import java.io.OutputStream;
-    	import java.net.URI;
-    	import org.apache.hadoop.conf.Configuration;
-    	import org.apache.hadoop.conf.Configured;
-    	import org.apache.hadoop.fs.FSDataOutputStream;
-    	import org.apache.hadoop.fs.FileSystem;
-    	import org.apache.hadoop.fs.LocalFileSystem;
-    	import org.apache.hadoop.fs.Path;
-    	import org.apache.hadoop.fs.RawLocalFileSystem;
-    	import org.apache.hadoop.util.Tool;
-    	import org.apache.hadoop.util.ToolRunner;
-    	
-    	public class DataIntegrity_Put_0010 extends Configured implements Tool{
-	    
-		    private FileSystem fs;
-		    private OutputStream os;
-	    
-		    @Override
-		    public int run(String[] args) throws Exception{
-			    Configuration conf=getConf();
-			    //不做数据校验
-			    fs=new RawLocalFileSystem();
-			    //因为是直接new的对象，所以这里使用这个方法去传递配置文件
-			    fs.initialize(URI.create(args[0]),conf);
-			    os=fs.create(new Path(args[0]));
-			    os.write("123456".getBytes());
-			    os.close();
-			    
-			    //做数据校验
-			    fs=new LocalFileSystem(fs);
-			    os=fs.create(new Path(args[1]));
-			    os.write("09876".getBytes());
-			    os.close();
-			    return 0;
-		    }
-		    
-		    public static void main(String[] args) throws Exception{
-			    System.exit(
-			    ToolRunner.run(
-			    new DataIntegrity_Put_0010(),
-			    args));
-		    }
-	    }
+        /**
+         * @Description 验证文件的完整性
+         * @Author super rui
+         * @Date 2019/10/08
+         */
+        public class CheckSumPut extends Configured implements Tool {
+        
+            private FileSystem fs;
+            private OutputStream os;
+        
+            @Override
+            public int run(String[] args) throws Exception {
+                Configuration conf = getConf();
+                //不做数据校验
+                fs = new RawLocalFileSystem();
+                //因为是直接new的对象，所以这里使用这个方法去传递配置文件
+                fs.initialize(URI.create(args[0]), conf);
+                os = fs.create(new Path(args[0]));
+                os.write("123456".getBytes());
+                os.close();
+        
+                //做数据校验
+                fs = new LocalFileSystem(fs);
+                os = fs.create(new Path(args[1]));
+                os.write("09876".getBytes());
+                os.close();
+                return 0;
+            }
+            public static void main(String[] args) throws Exception {
+                System.exit(ToolRunner.run(new CheckSumPut(), args));
+            }
 
 
 - 读取
 
-
-	    import java.io.InputStream;
-		import java.net.URI;
-		import org.apache.hadoop.conf.Configuration;
-		import org.apache.hadoop.conf.Configured;
-		import org.apache.hadoop.fs.FileSystem;
-		import org.apache.hadoop.fs.LocalFileSystem;
-		import org.apache.hadoop.fs.Path;
-		import org.apache.hadoop.fs.RawLocalFileSystem;
-		import org.apache.hadoop.util.Tool;
-		import org.apache.hadoop.util.ToolRunner;
-	
-		public class DataIntegrity_Get_0010
-		    extends Configured implements Tool{
-		
-		    private FileSystem fs;
-		    private InputStream is;
-		
-		    @Override
-		    public int run(String[] args) throws Exception{
-		        Configuration conf=getConf();
-		
-		        fs=new RawLocalFileSystem();
-		        fs.initialize(URI.create(args[0]),conf);
-		        is=fs.open(new Path(args[0]));
-		        byte[] buff=new byte[1024];
-		        int len=is.read(buff);
-		        System.out.println(new String(buff,0,len));
-		        is.close();
-		
-		        fs=new LocalFileSystem(fs);
-		        is=fs.open(new Path(args[1]));
-		        byte[] buff1=new byte[1024];
-		        int len1=is.read(buff1);
-		        System.out.println(new String(buff1,0,len1));
-		        is.close();
-		
-		        return 0;
-		    }
-		
-		    public static void main(String[] args) throws Exception{
-		        System.exit(ToolRunner.run(new DataIntegrity_Get_0010(),args));
-		    }
-		}
-
+        /**
+         * @Description 获取文件时候验证文件的完整性
+         * @Author super rui
+         * @Date 2019/10/08
+         */
+        public class CheckSumGet extends Configured implements Tool {
+            private FileSystem fs;
+            private InputStream is;
+            @Override
+            public int run(String[] args) throws Exception {
+                Configuration conf = getConf();
+                fs = new RawLocalFileSystem();
+                fs.initialize(URI.create(args[0]), conf);
+                is = fs.open(new Path(args[0]));
+                byte[] buff = new byte[1024];
+                int len = is.read(buff);
+                System.out.println(new String(buff, 0, len));
+                is.close();
+                
+                fs = new LocalFileSystem(fs);
+                is = fs.open(new Path(args[1]));
+                byte[] buff1 = new byte[1024];
+                int len1 = is.read(buff1);
+                System.out.println(new String(buff1, 0, len1));
+                is.close();
+                return 0;
+            }
+        
+            public static void main(String[] args) throws Exception {
+                System.exit(ToolRunner.run(new CheckSumGet(), args));
+            }
+        }
 
 ### 2、压缩
-
-
-
+#### 2.1 概述
+&ensp;&ensp;&ensp;文件压缩有两大好处：第一、减少存储文件所需要的磁盘空间；第二、加快数据流在网络和磁盘上的传输。有很多种不同的压缩工具和压缩算法，他们各有千秋，但是每种压缩算法都是权衡空间/时间：压缩和解压缩速度更快，其代价通常只能节省少量的空间。
+常见的压缩工具有：DEFLATE、GZip、bzip2、LZO、LZ4、Sannapy.
+#### 2.2 codec
+&ensp;&ensp;&ensp; codec实现了一种压缩-解压缩算法，其实质就是
 ### 3、序列化
 &ensp;&ensp;&ensp;
 
