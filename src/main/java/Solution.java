@@ -1,3 +1,8 @@
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @ClassName
  * @Description
@@ -7,7 +12,7 @@
 public class Solution {
 
     public static void main(String []args) {
-        List<Menu>  menuList= new ArrayList<Menu>();
+        List<Menu> menuList= new ArrayList<Menu>();
         /*插入一些数据*/
         menuList.add(new Menu("GN001D000","0","系统管理","/admin","Y"));
         menuList.add(new Menu("GN001D100","GN001D000","权限管理","/admin","Y"));
