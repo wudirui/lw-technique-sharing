@@ -26,6 +26,11 @@
 
 - 代码
 
+      /**
+       * super rui
+       *
+       * @return
+       */  
       @RestController
       @RequestMapping("test/")
       public class Controller {
@@ -61,6 +66,27 @@
           }
       
       }
+      
+      
+       /**
+       * 翟旭  刚哥
+       *
+       * @return
+       */
+      @RequestMapping("index/")
+      public Object jedisTest() {
+          Jedis jedis = new Jedis("localhost");
+          Long value = jedis.decr("key1");
+          logger.info("剩余库存：{}", value);
+          if (value < 0) {
+              jedis.incr("key1");
+              logger.info("减库存失败");
+          }
+          return "end";
+      }
+      
+      
+      
       
 #### 四、jmeter压力测试 
 

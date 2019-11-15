@@ -23,12 +23,18 @@ public class Controller {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
-    @RequestMapping(value = "index/", method = RequestMethod.GET)
+
+    /**
+     * super rui
+     *
+     * @return
+     */
+    @RequestMapping(value = "index1/", method = RequestMethod.GET)
     public Object index() {
 
         String lockKey = "key_001";
         String valueKey = "key1";
-        //Jedis jedis = new Jedis("localhost");
+
         try {
             Boolean b = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "zhangrui");
             if (!b) {
@@ -46,8 +52,25 @@ public class Controller {
         } finally {
             stringRedisTemplate.delete(lockKey);
         }
+
         return "end";
     }
 
+    /**
+     * 翟旭  刚哥
+     *
+     * @return
+     */
+    @RequestMapping("index/")
+    public Object jedisTest() {
+        Jedis jedis = new Jedis("localhost");
+        Long value = jedis.decr("key1");
+        logger.info("剩余库存：{}", value);
+        if (value < 0) {
+            jedis.incr("key1");
+            logger.info("减库存失败");
+        }
+        return "end";
+    }
 
 }
