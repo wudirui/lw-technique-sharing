@@ -29,7 +29,7 @@ public class Controller {
      *
      * @return
      */
-    @RequestMapping(value = "index1/", method = RequestMethod.GET)
+    @RequestMapping(value = "test1/", method = RequestMethod.GET)
     public Object index() {
 
         String lockKey = "key_001";
@@ -61,7 +61,7 @@ public class Controller {
      *
      * @return
      */
-    @RequestMapping("index/")
+    @RequestMapping("test2/")
     public Object jedisTest() {
         Jedis jedis = new Jedis("localhost");
         Long value = jedis.decr("key1");
