@@ -18,59 +18,63 @@ import redis.clients.jedis.Jedis;
 @RestController
 @RequestMapping("test/")
 public class Controller {
-    private Logger logger = LoggerFactory.getLogger(Controller.class);
+	private Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
+	@Autowired
+	StringRedisTemplate stringRedisTemplate;
 
 
-    /**
-     * super rui
-     *
-     * @return
-     */
-    @RequestMapping(value = "test1/", method = RequestMethod.GET)
-    public Object index() {
+	/**
+	 * super rui
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "test1/", method = RequestMethod.GET)
+	public Object index() {
 
-        String lockKey = "key_001";
-        String valueKey = "key1";
+		String lockKey = "key_001";
+		String valueKey = "key1";
+		Boolean b = false;
+		try {
+			b = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "zhangrui");
+			if (!b) {
+				logger.error("error");
+				return "error";
+			}
+			int num = Integer.parseInt(stringRedisTemplate.opsForValue().get(valueKey));
+			if (num > 0) {
+				int nowNum = num - 1;
+				stringRedisTemplate.opsForValue().set(valueKey, nowNum + "");
+				Boolean ifAbsent = stringRedisTemplate.opsForValue().setIfAbsent("" + nowNum, "");
+				if (!ifAbsent) {
+					logger.info("存在重复的key值：{}", nowNum);
+				}
+				logger.info("减库存成功，剩余库存：{}", nowNum);
+			} else {
+				logger.info("减库存失败！！");
+			}
+		} finally {
+			if (b)
+				stringRedisTemplate.delete(lockKey);
+		}
+		return "end";
+	}
 
-        try {
-            Boolean b = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, "zhangrui");
-            if (!b) {
-                logger.error("error");
-                return "error";
-            }
-            int num = Integer.parseInt(stringRedisTemplate.opsForValue().get(valueKey));
-            if (num > 0) {
-                int nowNum = num - 1;
-                stringRedisTemplate.opsForValue().set(valueKey, nowNum + "");
-                logger.info("减库存成功，剩余库存：{}", nowNum);
-            } else {
-                logger.info("减库存失败！！");
-            }
-        } finally {
-            stringRedisTemplate.delete(lockKey);
-        }
-
-        return "end";
-    }
-
-    /**
-     * 翟旭  刚哥
-     *
-     * @return
-     */
-    @RequestMapping("test2/")
-    public Object jedisTest() {
-        Jedis jedis = new Jedis("localhost");
-        Long value = jedis.decr("key1");
-        logger.info("剩余库存：{}", value);
-        if (value < 0) {
-            jedis.incr("key1");
-            logger.info("减库存失败");
-        }
-        return "end";
-    }
+	/**
+	 * 翟旭  刚哥
+	 *
+	 * @return
+	 */
+	@RequestMapping("test2/")
+	public Object jedisTest() {
+		Jedis jedis = new Jedis("localhost");
+		Long value = jedis.decr("key1");
+		logger.info("剩余库存：{}", value);
+		if (value < 0) {
+			jedis.incr("key1");
+			logger.info("减库存失败");
+		}
+		return "end";
+	}
 
 }
